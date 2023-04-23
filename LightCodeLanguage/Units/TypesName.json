@@ -1,0 +1,20 @@
+{
+  "string":"字串",
+  "number":"數字",
+  "nan":"非數",
+  "boolean":"布林值",
+  "none":"無",
+  "operator":"運算符",
+  "expression":"運算式",
+  "symbol":"符號",
+  "keyword":"關鍵字",
+  "container":"容器",
+  "array":"陣列",
+  "parameters":"參數列",
+  "object":"物件",
+  "key":"鑰",
+  "index":"索引",
+  "chunk":"區塊",
+  "function":"函數",
+  "promise":"承諾"
+}
