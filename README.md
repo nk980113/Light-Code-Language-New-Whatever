@@ -1,7 +1,8 @@
-# Light-Code-Language-LCL-
+# 簡介
 LCL是一個虛擬編程語言，他的語法是中文的，且語法類似 Javascript。它是由 Javascript 所建構的，所以它可以很簡單的跟 JS 做交互。
 
 # 目錄
+* [Q & A](#QA)
 
 # Q & A
 
