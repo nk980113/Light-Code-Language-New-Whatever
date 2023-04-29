@@ -1,5 +1,7 @@
 import { createTimer } from '../../Tools/Timer.js'
 
+import executeExpression from './Execute/ExecuteExpression.js'
+import executeOperator from './Execute/ExecuteOperator.js'
 import { actuator, stopActuator } from './Main.js'
 import log from './Log.js'
 
@@ -61,5 +63,25 @@ function executeLoop () {
 
 //執行區塊
 function executeChunk (chunk) {
-  console.log(chunk)
+  if (chunk.executiveData.row >= chunk.codeSegment.length) {
+    if (chunk.callPath[chunk.callPath.length-1] !== undefined && actuator.chunks[chunk.callPath[chunk.callPath.length-1].id] !== undefined && actuator.chunks[chunk.callPath[chunk.callPath.length-1].id].state === `wait.${chunk.id}`) {
+      actuator.chunks[chunk.callPath[chunk.callPath.length-1].id].returnedData = chunk.returnData
+      actuator.chunks[chunk.callPath[chunk.callPath.length-1].id].state = 'running'
+    } else if (chunk.id === 'main') actuator.returnData = chunk.returnData
+    removeTesk(chunk.id)
+    delete actuator.chunks[chunk.id]
+  } else {
+    let complexType = chunk.codeSegment[chunk.executiveData.row]
+  
+    if (complexType.type === 'string') chunk.returnData = { type: 'string', value: complexType.value }
+    else if (complexType.type === 'number') chunk.returnData = { type: 'number', value: complexType.value }
+    else if (complexType.type === 'nan') chunk.returnData = { type: 'nan', value: complexType.value }
+    else if (complexType.type === 'none') chunk.returnData = { type: 'none', value: complexType.value }
+    else if (complexType.type === 'boolean') chunk.returnData = { type: 'boolean', value: complexType.value }
+    else if (complexType.type === 'operator') {
+      if (executeOperator(chunk, complexType)) return
+    } else if (complexType.type === 'expression') if (executeExpression(chunk, complexType)) return
+  
+    chunk.executiveData.row++
+  }
 }

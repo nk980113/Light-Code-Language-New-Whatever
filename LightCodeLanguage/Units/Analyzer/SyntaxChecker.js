@@ -31,6 +31,8 @@ export default (complexTypes, addErrorContent) => {
       return { error: true, type: 'analysis', content: `多出了一個 <${typesName[complexTypes[i+1].type]}>${(addErrorContent === undefined) ? '' : addErrorContent}`, start: complexTypes[i+1].start, end: complexTypes[i+1].end, path: [{ filePath: __dirname, function: '{語法檢查器}', line: complexTypes[i+1].line }] }
     } else if (complexTypes[i].type === 'operator' && (complexTypes[i].value === '+' || complexTypes[i].value === '-') && complexTypes[i+1] === undefined) {
       return { error: true, type: 'analysis', content: `多出了一個 <運算符> "${complexTypes[i].value}"${(addErrorContent === undefined) ? '' : addErrorContent}`, start: complexTypes[i].start, end: complexTypes[i].end, path: [{ filePath: __dirname, function: '{語法檢查器}', line: complexTypes[i].line }] }
+    } else if (complexTypes[i].type === 'operator' && complexTypes[i+1] === undefined) {
+      return { error: true, type: 'analysis', content: `多出了一個 <運算符> "${complexTypes[i].value}"${(addErrorContent === undefined) ? '' : addErrorContent}`, start: complexTypes[i].start, end: complexTypes[i].end, path: [{ filePath: __dirname, function: '{語法檢查器}', line: complexTypes[i].line }] }
     } else if (complexTypes[i].type === 'operator' && (complexTypes[i].value !== '+' && complexTypes[i].value !== '-') && (complexTypes[i-1] === undefined || complexTypes[i+1] === undefined)) {
       return { error: true, type: 'analysis', content: `必須為一個 <運算式>${(addErrorContent === undefined) ? '' : addErrorContent}`, start: complexTypes[i].start, end: complexTypes[i].end, path: [{ filePath: __dirname, function: '{語法檢查器}', line: complexTypes[i].line }] }
     }

@@ -14,7 +14,6 @@ import defaultValue from '../../Tools/DefaultValue.js'
 import generateID from '../../Tools/GenerateID.js'
 import { getPath } from '../../Tools/Path.js'
 
-import getVMemoryOverLimitContent from './GetVMemoryOverLimitContent.js'
 import { defaultSettings, checkSettings } from './ActuatorSettings.js'
 import getErrorLogContent from './GetErrorLogContent.js'
 import log from './Log.js'
@@ -52,11 +51,15 @@ function runActuator (id) {
   //接收執行器的訊息
   function handleActuatorMessage (msg) {
     if (msg.type === 'stop') {
-      if (msg.data.error) {
-        if (msg.data.content === 'vMemOverLimit') log(id, { type: 'normal', content: getVMemoryOverLimitContent(msg.data.vMemoryUsed, actuators[id].settings.vMemCanUse) })
-        else log(id, { type: 'normal', content: getErrorLogContent(msg.data.error) })
-      }
       actuators[id].worker.off('message', handleActuatorMessage)
+      actuators[id].worker.terminate()
+      actuators[id].worker = undefined
+      if (msg.data.error) {
+        if (msg.data.content === 'vMemOverLimit' || msg.data.content === 'callLengthOverLimit') log(id, { type: 'normal', content: msg.data.detail })
+        else log(id, { type: 'normal', content: getErrorLogContent(msg.data) })
+      } else {
+        log(id, { type: 'normal', content: msg.data })
+      }
     } else if (msg.type === 'log') {
       log(id, msg.data)
     }
