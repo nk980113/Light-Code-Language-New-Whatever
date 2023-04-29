@@ -1,0 +1,19 @@
+{
+  "type": "module",
+  "main": "dist/index.js",
+  "devDependencies": {
+    "tsup": "^6.7.0",
+    "typescript": "^5.0.2"
+  },
+  "dependencies": {
+    "@types/node": "^18.15.10",
+    "auto-bind": "^5.0.1",
+    "chalk": "^5.2.0",
+    "typed-emitter": "^2.1.0",
+    "zod": "^3.21.2"
+  },
+  "scripts": {
+    "build": "tsup --dts",
+    "test": "tsup --keepNames && node --experimental-specifier-resolution=node test.js"
+  }
+}
